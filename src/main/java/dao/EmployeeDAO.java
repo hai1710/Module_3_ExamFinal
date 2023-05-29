@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAO {
-    public static final String JDBC_URL = "jdbc:mysql://localhost:3306/md3?useSSL=false";
+    public static final String JDBC_URL = "jdbc:mysql://localhost:3306/exam_module_3?useSSL=false";
     public static final String JDBC_USER = "root";
-    public static final String JDBC_PASSWORD = "123456";
+    public static final String JDBC_PASSWORD = "admin";
 
     public static Connection getConnection() {
         Connection connection = null;
@@ -42,7 +42,7 @@ public class EmployeeDAO {
     }
 
     public List<Employee> getAllEmployee(){
-        String SELECT_ALL_SQL = "SELECT employee.*, name_department from employee join department on employee.id_department = department.id_department;";
+        String SELECT_ALL_SQL = "SELECT*FROM employee LEFT JOIN department USING(department_id);";
         List<Employee> employeeList = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SQL)){
@@ -52,7 +52,7 @@ public class EmployeeDAO {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 String address = resultSet.getString("address");
-                String phoneNumber = resultSet.getString("phone");
+                String phoneNumber = resultSet.getString("phone_number");
                 double salary = resultSet.getDouble("salary");
                 String department = resultSet.getString("department_name");
                 employeeList.add(new Employee(employee_id,name,email,address,phoneNumber,salary,department));
@@ -106,5 +106,29 @@ public class EmployeeDAO {
         catch (SQLException ex){
             printSQLException(ex);
         }
+    }
+
+    public List<Employee> searchEmployee(String searchKey){
+        String SELECT_EMPLOYEE_BY_ID = "SELECT*FROM employee LEFT JOIN department USING(department_id) WHERE name like ?;";
+        List<Employee> employeeList = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID)){
+            preparedStatement.setString(1, "%"+ searchKey + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int employee_id = resultSet.getInt("employee_id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String address = resultSet.getString("address");
+                String phoneNumber = resultSet.getString("phone_number");
+                double salary = resultSet.getDouble("salary");
+                String department_id = resultSet.getString("department_name");
+                employeeList.add(new Employee(employee_id,name,email,address,phoneNumber,salary,department_id));
+            }
+        }
+        catch (SQLException ex){
+            printSQLException(ex);
+        }
+        return employeeList;
     }
 }
