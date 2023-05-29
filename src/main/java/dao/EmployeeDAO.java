@@ -42,7 +42,7 @@ public class EmployeeDAO {
     }
 
     public List<Employee> getAllEmployee(){
-        String SELECT_ALL_SQL = "SELECT*FROM employee LEFT JOIN department USING(department_id);";
+        String SELECT_ALL_SQL = "SELECT employee.*, name_department from employee join department on employee.id_department = department.id_department;";
         List<Employee> employeeList = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SQL)){
@@ -52,7 +52,7 @@ public class EmployeeDAO {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 String address = resultSet.getString("address");
-                String phoneNumber = resultSet.getString("phone_number");
+                String phoneNumber = resultSet.getString("phone");
                 double salary = resultSet.getDouble("salary");
                 String department = resultSet.getString("department_name");
                 employeeList.add(new Employee(employee_id,name,email,address,phoneNumber,salary,department));
