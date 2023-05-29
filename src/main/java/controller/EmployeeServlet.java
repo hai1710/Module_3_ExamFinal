@@ -36,10 +36,12 @@ public class EmployeeServlet extends HttpServlet {
                 showUpdateForm(request, response);
                 break;
             case "delete":
-                showDeleteForm(request, response);
+                delete(request, response);
+                getEmployeeList(request,response);
                 break;
             case "search":
                 showSearchResult(request, response);
+                break;
             default:
                 getEmployeeList(request, response);
                 break;

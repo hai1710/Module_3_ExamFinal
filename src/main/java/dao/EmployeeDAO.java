@@ -81,7 +81,7 @@ public class EmployeeDAO {
         }
     }
     public void updateEmployee(Employee employee){
-        String UPDATE_EMPLOYEE_SQL = "UPDATE employee SET name=?,email=?,address=?,phone_number=?,salary=?,department_id=? WHERE employee_id = ?;";
+        String UPDATE_EMPLOYEE_SQL = "UPDATE employee SET name=?,email=?,address=?,phone_number=?,salary=?,id_department=? WHERE id_employee = ?;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EMPLOYEE_SQL)){
             preparedStatement.setString(1, employee.getName());
@@ -97,11 +97,11 @@ public class EmployeeDAO {
         }
     }
 
-    public void deleteEmployee(String employee_id){
-        String DELETE_EMPLOYEE_SQL = "DELETE FROM employee WHERE employee_id = ?;";
+    public void deleteEmployee(String id_employee){
+        String DELETE_EMPLOYEE_SQL = "DELETE FROM employee WHERE id_employee = ?;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EMPLOYEE_SQL)){
-            preparedStatement.setString(1, employee_id);
+            preparedStatement.setString(1, id_employee);
             preparedStatement.executeUpdate();
         }
         catch (SQLException ex){
@@ -110,21 +110,21 @@ public class EmployeeDAO {
     }
 
     public List<Employee> searchEmployee(String searchKey){
-        String SELECT_EMPLOYEE_BY_ID = "SELECT*FROM employee LEFT JOIN department USING(department_id) WHERE name like ?;";
+        String SELECT_EMPLOYEE_BY_ID = "SELECT*FROM employee LEFT JOIN department On employee.id_department = department.id_department WHERE name like ?;";
         List<Employee> employeeList = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID)){
             preparedStatement.setString(1, "%"+ searchKey + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                int employee_id = resultSet.getInt("employee_id");
+                int employee_id = resultSet.getInt("id_employee");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 String address = resultSet.getString("address");
                 String phoneNumber = resultSet.getString("phone_number");
                 double salary = resultSet.getDouble("salary");
-                String department_id = resultSet.getString("department_name");
-                employeeList.add(new Employee(employee_id,name,email,address,phoneNumber,salary,department_id));
+                String department_name = resultSet.getString("name_department");
+                employeeList.add(new Employee(employee_id,name,email,address,phoneNumber,salary,department_name));
             }
         }
         catch (SQLException ex){
