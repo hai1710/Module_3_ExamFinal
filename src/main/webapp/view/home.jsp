@@ -18,6 +18,10 @@
     <input type="hidden" name="choice" value="create">
     <input type="submit" value="Thêm">
 </form>
+<form action="home" method="get">
+    <input type="text" name="searchKey" placeholder="search here">
+    <input type="submit" name="choice" value="search">
+</form>
 <table>
     <tr>
         <th>#</th>
@@ -44,9 +48,6 @@
     </c:forEach>
 </table>
 
-<form action="home" method="get">
-    <input type="text" name="searchKey" placeholder="search here">
-    <input type="submit" name="choice" value="search">
-</form>
+
 </body>
 </html>
