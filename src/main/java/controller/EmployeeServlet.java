@@ -64,8 +64,6 @@ public class EmployeeServlet extends HttpServlet {
                 getEmployeeList(request, response);
                 break;
             case "delete":
-                delete(request, response);
-                getEmployeeList(request, response);
                 break;
             default:
                 getEmployeeList(request, response);
