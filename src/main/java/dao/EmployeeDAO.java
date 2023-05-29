@@ -48,14 +48,15 @@ public class EmployeeDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SQL)){
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                int employee_id = resultSet.getInt("employee_id");
+                int employee_id = resultSet.getInt("id_employee");
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 String address = resultSet.getString("address");
                 String phoneNumber = resultSet.getString("phone_number");
                 double salary = resultSet.getDouble("salary");
-                String department = resultSet.getString("department_name");
-                employeeList.add(new Employee(employee_id,name,email,address,phoneNumber,salary,department));
+                int id_department = resultSet.getInt("id_department");
+                String department = resultSet.getString("name_department");
+                employeeList.add(new Employee(employee_id,name,email,address,phoneNumber,salary,department,id_department));
             }
         }
         catch (SQLException ex){

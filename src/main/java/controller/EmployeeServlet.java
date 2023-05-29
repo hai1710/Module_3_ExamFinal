@@ -119,6 +119,10 @@ public class EmployeeServlet extends HttpServlet {
         int department_id = Integer.parseInt(request.getParameter("department_id"));
         Employee employee = new Employee(employee_id,name,email,address,phoneNumber,salary,department,department_id);
         employeeDAO.updateEmployee(employee);
+        List<Employee> employeeList = employeeDAO.getAllEmployee();
+        request.setAttribute("employeeList",employeeList);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/home.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
